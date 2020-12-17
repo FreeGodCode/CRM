@@ -16,9 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    url(r'^rbac/$', include('rbac.urls',namespace='rbac')),
-    url(r'^app/$', include('app.urls', namespace='app')),
+    path('echart/', include('smart_chart.echart.urls')),
+    path('', RedirectView.as_view(url='echart/index/')),
+    url(r'^rbac/', include(('rbac.urls', 'rbac'),namespace='rbac')),
+    url(r'^app/', include(('app.urls', 'app'), namespace='app')),
 ]

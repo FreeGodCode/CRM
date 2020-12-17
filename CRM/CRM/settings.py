@@ -23,8 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '$opgn65fvnqllb#3&^*yb^7+i!x4j)dp_cq5d)1$zi5f3(mt9e'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-# DEBUG = True
+# DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rbac',
     'app',
+    'smart_chart.echart',
 ]
 
 MIDDLEWARE = [
@@ -50,6 +52,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rbac.middleware.middleware.CheckPermissionMiddleware',
+
 ]
 
 ROOT_URLCONF = 'CRM.urls'
@@ -122,7 +126,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'zh-hans'
 
 # TIME_ZONE = 'UTC'
-TIME_ZONE = 'Asia/Shanghai  '
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -137,8 +141,20 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 
+# 静态文件根目录
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+# 权限session_key配置
+PERMISSION_URL_SESSION_KEY = 'login_permission_url_list_key'
+# 菜单列表session_key配置
+PERMISSION_MENU_SESSION_KEY = 'permission_menu_list_key'
 
+# URL白名单
+VALID_URL_LIST = [
+    '/login/',
+    '/admin/.*',
+]
 
