@@ -1,4 +1,5 @@
 import re
+from collections import OrderedDict
 
 from django.conf import settings
 from django.template import Library
@@ -33,6 +34,7 @@ def multi_menu(request):
     :return:
     """
     menu_dict = request.session[settings.MENU_SESSION_KEY]
+    print(request.current_selected_permission)
     # 对字典中的key进行排序
     key_list = sorted(menu_dict)
     ordered_dict = OrderedDict()
@@ -40,8 +42,9 @@ def multi_menu(request):
         val = menu_dict[key]
         val['class'] = 'hide'
         for per in val['children']:
-            regex = '^%s$' % (per['url'], )
-            if re.match(regex, request.path_info):
+            # regex = '^%s$' % (per['url'], )
+            # if re.match(regex, request.path_info):
+            if per['id'] == request.current_selected_permission:
                 per['class'] = 'active'
                 val['class'] = ''
         ordered_dict[key] = val

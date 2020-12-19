@@ -37,12 +37,15 @@ class CheckPermissionMiddleware(MiddlewareMixin):
             return HttpResponse('未获取用户权限信息,请登录')
 
         flag = False
-        for url in permission_list:
+        # for url in permission_list:
+        for item in permission_list:
             # 含正则的url,拼接上起始符和结束符
-            regex = '^%s$' % url
+            # regex = '^%s$' % url
+            regex = '^%s$' % item['url']
             # url匹配成功
             if re.match(regex, current_url):
                 flag = True
+                request.current_selected_permission = item['pid'] or item['id']
                 break
 
         if not flag:

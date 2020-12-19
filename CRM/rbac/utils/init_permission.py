@@ -14,11 +14,12 @@ def init_permission(current_user, request):
     # 可能含有没有分配权限的情况
     permission_queryset = current_user.roles.filter(permission__isnull=False).values(
         'permission__id',
-        'permission__url',
         'permission__title',
+        'permission__url',
+        'permission__pid_id',
         # 'permission__is_menu',
         # 'permission__icon'
-        'permission__menu__id',
+        'permission__menu_id',
         'permission__menu__title',
         'permission__menu__icon',
     ).distinct()
@@ -28,7 +29,10 @@ def init_permission(current_user, request):
     menu_dict = {}
     permission_list = []
     for item in permission_queryset:
-        permission_list.append(item['permission__url'])
+        # permission_list.append(item['permission__url'])
+        permission_list.append({
+            'id': item['permission__id'], 'url': item['permission__url'], 'pid': item['permission__pid_id']
+        })
         # if item['permission__is_menu']:
             # temp = {
             #     'title': item['permission__title'],
@@ -37,12 +41,12 @@ def init_permission(current_user, request):
             # }
             # menu_list.append(temp)
         # menu_id默认为null
-        menu_id = item['permission__menu__id']
+        menu_id = item['permission__menu_id']
         # menu_id == null
         if not menu_id:
             continue
 
-        node = {'title': item['permission__title'], 'url': item['permission__url']}
+        node = {'id': item['permission__id'], 'title': item['permission__title'], 'url': item['permission__url']}
         if menu_id in menu_dict:
             menu_dict[menu_id]['children'].append(node)
         else:
